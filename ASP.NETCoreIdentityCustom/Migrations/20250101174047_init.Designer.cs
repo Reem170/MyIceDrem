@@ -12,7 +12,7 @@ using MyIceDream.Areas.Identity.Data;
 namespace MyIceDream.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250101151321_init")]
+    [Migration("20250101174047_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
