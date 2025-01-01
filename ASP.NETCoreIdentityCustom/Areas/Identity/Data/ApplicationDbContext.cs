@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     }
 
     public DbSet<VwUser> VwUsers { get; set; }
+    public DbSet<Product> Products { get; set; }
    
     protected override void OnModelCreating(ModelBuilder builder)
     {
