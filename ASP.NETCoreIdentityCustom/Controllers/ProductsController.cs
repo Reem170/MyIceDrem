@@ -1,154 +1,57 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using MyIceDream.Models;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Mvc;
 using MyIceDream.Areas.Identity.Data;
-using DocumentFormat.OpenXml.Drawing.Charts;
+using MyIceDream.Models;
 
 namespace MyIceDream.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public ProductsController(ApplicationDbContext context)
         {
             _context = context;
         }
+    //    private static List<Product> products = new List<Product>
+    //{
+    //    new Product { Id = 1, Name = "Laptop", Price = 1000, ImageData = null },
+    //    new Product { Id = 2, Name = "Smartphone", Price = 500, ImageData = null }
+    //};
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            var products = _context.Products.ToList();
+            // Here we would normally get the data from a database.
+            List<Product> products = _context.Products.ToList();
             return View(products);
         }
 
-        public IActionResult Create()
+
+        // GET: Product/Create
+        public ActionResult Create()
         {
             return View();
         }
 
+    
+        // POST: Product/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product, IFormFile imageFile)
-        {
-            if (ModelState.IsValid)
-            {
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    try
-                    {
-                        // Using MemoryStream to handle the image as byte array
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await imageFile.CopyToAsync(memoryStream);
-                            product.ImageData = memoryStream.ToArray();
-                       
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Handle any exception if something went wrong during image processing
-                        ModelState.AddModelError("ImageFile", "Error uploading the image: " + ex.Message);
-                        return View(product);
-                    }
-                }
-
-                try
-                {
-                    // Save the product (with image) to the database
-                    _context.Add(product);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, "Error saving product: " + ex.Message);
-                }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Model is not valid.");
-            }
-
-            return View(product);
-        }
-
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) return NotFound();
-
-            return View(product);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product, IFormFile imageFile)
-        {
-            if (id != product.Id) return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                var existingProduct = await _context.Products.FindAsync(id);
-                if (existingProduct == null) return NotFound();
-
-                existingProduct.Name = product.Name;
-                existingProduct.Price = product.Price;
-
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await imageFile.CopyToAsync(memoryStream);
-                        existingProduct.ImageData = memoryStream.ToArray();
         
-                    }
-                }
-
-                _context.Update(existingProduct);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(product);
-        }
-
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Create(Product product)
         {
-            if (id == null) return NotFound();
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) return NotFound();
-
-            return View(product);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) return NotFound();
-
-            return View(product);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            if (ModelState.IsValid)
             {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
+
+                _context.Products.Add(product);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return RedirectToAction(nameof(Index));
+           
+           
+
+            return View(product);
         }
+
+       
     }
 }
+

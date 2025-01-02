@@ -12,7 +12,7 @@ using MyIceDream.Areas.Identity.Data;
 namespace MyIceDream.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250101202147_init")]
+    [Migration("20250101231214_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -244,11 +244,7 @@ namespace MyIceDream.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<byte[]>("ImageData")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ImageMimeType")
+                    b.Property<string>("ImageData")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

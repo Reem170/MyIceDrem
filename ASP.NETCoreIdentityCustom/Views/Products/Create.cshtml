@@ -1,23 +1,32 @@
 ﻿@model MyIceDream.Models.Product
 
-<h1>Add Product</h1>
+@{
+    ViewData["Title"] = "Create Product";
+}
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<h2>Create Product</h2>
+
+<form asp-action="Create" asp-controller="Products" enctype="multipart/form-data" method="post">
     <div class="form-group">
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Price"></label>
         <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 
-    <!-- Image Upload -->
     <div class="form-group">
-        <label for="Images">Product Image</label>
-        <input type="file" name="images" id="images" />
+        <label asp-for="ImageData">Upload Image</label>
+        <input asp-for="ImageData" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

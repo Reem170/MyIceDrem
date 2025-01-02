@@ -1,35 +1,44 @@
 ﻿@model IEnumerable<MyIceDream.Models.Product>
 
-<h1>Product List</h1>
-<a asp-action="Create" class="btn btn-primary">Add Product</a>
+@{
+    ViewBag.Title = "Product List";
+}
 
+<h2>@ViewBag.Title</h2>
+
+<div class="row pt-4">
+    <div class="col-4 text-right">
+        <a asp-controller="Products" asp-action="Create" class="btn btn-primary w-50"><i class="bi bi-plus-circle-fill"></i>  Tilføj Ny</a>
+    </div>
+    <div class="col-4 text-">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary w-50"><i class="bi bi-backspace"></i>  Tilbage</a>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Name</th>
             <th>Price</th>
             <th>Image</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var product in Model)
         {
             <tr>
+                <td>@product.Id</td>
                 <td>@product.Name</td>
                 <td>@product.Price</td>
                 <td>
                     @if (product.ImageData != null)
                     {
-                        <img src="data:@(Convert.ToBase64String(product.ImageData))"
-                             alt="Product Image"
-                             style="width: 100px;" />
+                        <img src="@Url.Action("GetImage", "Product", new { id = product.Id })" alt="Product Image" />
                     }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger">Delete</a>
+                    else
+                    {
+                        <span>No Image</span>
+                    }
                 </td>
             </tr>
         }

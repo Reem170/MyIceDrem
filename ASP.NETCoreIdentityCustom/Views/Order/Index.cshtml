@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MyIceDream.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h2>Orders</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>Total Price</th>
+            <th>Time</th>
+            <th>Amount</th>
+            <th>Products</th>
+            <th>User</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.TotalPrice</td>
+                <td>@order.Time.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@order.Amount</td>
+                <td>
+                    <ul>
+                        @if (order.Products != null)
+                        {
+                            @foreach (var product in order.Products)
+                            {
+                                <li>@product.Name (@product.Price)</li>
+                            }
+                        }
+                        else
+                        {
+                            <li>No Products</li>
+                        }
+                    </ul>
+                </td>
+                <td>@(order.User != null ? order.User.Name : "Unknown User")</td>
+            </tr>
+        }
+    </tbody>
+</table>
